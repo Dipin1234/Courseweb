@@ -1,0 +1,2155 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+<body>
+<!-- partial:index.partial.html -->
+<!DO>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>वीडियो कोर्स - शैक्षिक पाठ्यक्रम</title>
+</head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    :root {
+      /* Default: Neon Green Theme */
+      --primary-color: #00ff00;
+      --light-color: #ccff90;
+      --secondary-color: #99cc00;
+      --glow-color: rgba(0, 255, 0, 0.5);
+      --glow-color-bright: rgba(0, 255, 0, 0.8);
+      --button-text-color: #000;
+    }
+
+    body {
+      background-color: #1a1a1a;
+      color: var(--light-color);
+      position: relative;
+    }
+
+    header {
+      background-color: #0d0d0d;
+      color: var(--light-color);
+      text-align: center;
+      padding: 2rem;
+      border-bottom: 2px solid var(--primary-color);
+      text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+    }
+
+    .color-picker {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      border: 2px solid var(--light-color);
+      box-shadow: 0 0 10px var(--glow-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.3s;
+      z-index: 1000;
+    }
+
+    .color-picker:hover {
+      box-shadow: 0 0 15px var(--glow-color-bright);
+    }
+
+    .color-picker::before {
+      content: '🎨';
+      font-size: 1.5rem;
+    }
+
+    .color-palette {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background-color: #0d0d0d;
+      border: 2px solid var(--primary-color);
+      border-radius: 8px;
+      padding: 1rem;
+      display: none;
+      grid-template-columns: repeat(5, 30px);
+      gap: 10px;
+      box-shadow: 0 0 15px var(--glow-color);
+      z-index: 999;
+    }
+
+    .color-palette.active {
+      display: grid;
+    }
+
+    .color-option {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #fff;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .color-option:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 10px #fff;
+    }
+
+    h2 {
+      color: var(--light-color);
+      text-align: center;
+      margin: 2rem 0;
+      text-shadow: 0 0 8px var(--glow-color);
+      font-size: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+
+
+
+    .video-card {
+      background-color: rgba(13, 13, 13, 0.8);
+      border: 1px solid var(--primary-color);
+      border-radius: 8px;
+      box-shadow: 0 0 15px var(--glow-color);
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+
+    .video-card:hover {
+      transform: scale(1.05);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 15px var(--glow-color);
+      }
+
+      50% {
+        box-shadow: 0 0 25px var(--glow-color-bright);
+      }
+
+      100% {
+        box-shadow: 0 0 15px var(--glow-color);
+      }
+    }
+
+    .video-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      opacity: 0.9;
+      transition: opacity 0.3s;
+    }
+
+    .video-card:hover img {
+      opacity: 1;
+    }
+
+    .video-card-content {
+      padding: 1.5rem;
+    }
+
+    .video-card-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--light-color);
+      text-shadow: 0 0 8px var(--glow-color);
+    }
+
+    .video-card-content p {
+      color: var(--secondary-color);
+      margin-bottom: 1rem;
+    }
+
+    .video-card-content a {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: var(--button-text-color);
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .video-card-content a:hover {
+      background-color: var(--secondary-color);
+      box-shadow: 0 0 10px var(--primary-color);
+    }
+
+    footer {
+      background-color: #0d0d0d;
+      color: var(--light-color);
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-top: 2px solid var(--primary-color);
+      text-shadow: 0 0 10px var(--primary-color);
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      }
+
+      .color-palette {
+        grid-template-columns: repeat(3, 30px);
+      }
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .color-picker {
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+      }
+
+      .color-palette {
+        top: 50px;
+        right: 10px;
+      }
+    }
+
+    .video-card-wrapper {
+  position: relative;
+}
+
+.floating-notes-button {
+  position: absolute;
+  top: -20px;
+  left: 20px;
+  background-color: var(--primary-color);
+  color: var(--button-text-color);
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 0 15px var(--glow-color);
+  transition: transform 0.2s, box-shadow 0.2s;
+  z-index: 10;
+}
+
+.floating-notes-button:hover {
+  transform: scale(1.1);
+  background-color: var(--secondary-color);
+  box-shadow: 0 0 25px var(--glow-color-bright);
+}
+    .button-container {
+    max-width: 1200px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+    text-align: right; /* Aligns button to the right */
+}
+
+.notes-button {
+    display: inline-block;
+    background-color: var(--primary-color); /* Neon green */
+    color: var(--button-text-color); /* Black text */
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 2px solid var(--light-color);
+    box-shadow: 0 0 10px var(--glow-color);
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.notes-button:hover {
+    background-color: var(--secondary-color); /* Darker green on hover */
+    box-shadow: 0 0 15px var(--glow-color-bright);
+    transform: scale(1.05);
+}
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>शैक्षिक वीडियो कोर्स</h1>
+    <a href="utnotes.html" class="notes-button">Go to notes</a>
+
+  </header>
+
+  <div class="color-picker" onclick="toggleColorPalette()"></div>
+  <div class="color-palette" id="color-palette">
+     <div class="color-option" style="background-color: #8a2be2;" data-theme="purple"></div>
+    <div class="color-option" style="background-color: #4fc3f7;" data-theme="sky-blue"></div>
+    <div class="color-option" style="background-color: #ff0000;" data-theme="red"></div>
+       <div class="color-option" style="background-color: #ff6200;" data-theme="orange"></div>
+    <div class="color-option" style="background-color: #00ff00;" data-theme="neon-green"></div>
+    <div class="color-option" style="background-color: #00e5ff;" data-theme="cyan"></div>
+    <div class="color-option" style="background-color: #ff4081;" data-theme="pink"></div>
+    <div class="color-option" style="background-color: #c6ff00;" data-theme="lime"></div>
+    <div class="color-option" style="background-color: #00bfa5;" data-theme="teal"></div>
+    <div class="color-option" style="background-color: #ffab00;" data-theme="amber"></div>
+  </div>
+
+  <section>
+    <h2>शैक्षिक पाठ्यक्रम</h2>
+    <div class="container">
+      <!-- Video 1 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6378306_Educational%20Management.png" alt="Thumbnail for Curriculum Discussion Part-1 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 || पाठ्यक्रम परिचर्चा (Curriculum Discussion)</h3>
+          <p>17-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2569970%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: पाठ्यक्रम परिचर्चा Part-1">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7813199_Education%20Psychology.png" alt="Thumbnail for Educational Scenario Part-1 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 || शैक्षिक परिदृश्य (Educational Scenario)</h3>
+          <p>20-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2573459%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: शैक्षिक परिदृश्य Part-1">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 3 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1255531_Educational%20Psychology.png" alt="Thumbnail for Educational Scenario Part-2 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-2 || शैक्षिक परिदृश्य (Educational Scenario)</h3>
+          <p>21-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2575171%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: शैक्षिक परिदृश्य Part-2">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 4 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2822057_Educational%20Psychology.png" alt="Thumbnail for Educational Scenario Part-3 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-3 || शैक्षिक परिदृश्य (Educational Scenario)</h3>
+          <p>22-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2576956%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: शैक्षिक परिदृश्य Part-3">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 5 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6230023_Educational%20Scenario.png" alt="Thumbnail for Educational Institutions of India Part-1 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 || भारत के शैक्षणिक संस्थान (Educational Institutions of India)</h3>
+          <p>23-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2578847%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: भारत के शैक्षणिक संस्थान Part-1">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 6 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1429203_Educational%20Scenario.png" alt="Thumbnail for Educational Institutions of India Part-2 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-2 || भारत के शैक्षणिक संस्थान (Educational Institutions of India)</h3>
+          <p>24-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2580625%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: भारत के शैक्षणिक संस्थान Part-2">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2324201_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-3 भारत के शैक्षणिक संस्थान (Educational Institutions of India)</h3>
+          <p>26-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2582725%2Fplain%2F720x1280.mp4" aria-label="वीडियो ��लाएँ: Part-3 भारत के शैक्षणिक संस्थान">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4680203_Educational%20Scenario%20%282%29.png" alt="Educational Scenario Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-4 भारत के शैक्षणिक संस्थान (Educational Institutions of India)</h3>
+          <p>27-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2584436%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-4 भारत के शैक्षणिक संस्थान">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5881561_Educational%20Scenario%20%282%29.png" alt="Educational Scenario Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-5 भारत के शैक्षणिक संस्थान (Educational Institutions of India)</h3>
+          <p>28-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2586091%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-5 भारत के शैक्षणिक संस्थान">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5128270_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-6भारत के शैक्षणिक संस्थान (Educational Institutions of India)</h3>
+          <p>29-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2587774%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-6 भारत के शैक्षणिक संस्थान">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4725757_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-7 भारत के शैक्षणिक संस्थान (Educational Institutions of India)</h3>
+          <p>30-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2589367%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-7 भारत क�� शैक्षणिक संस्थान">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4870519_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 शिक्षण अधिगम नवाचार</h3>
+          <p>31-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2591087%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 शिक्षण अधिगम नवाचार">वीडियो चलाएँ</a>
+        </div>
+      </div>
+      <!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4870519_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-2 शिक्षा अधिगम नवाचार</h3>
+        <p>03-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2594481%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 शिक्षा अधिगम नवाचार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4870519_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-3 शिक्षा अधिगम नवाचार</h3>
+        <p>04-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2596098%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-3 शिक्षा अधिगम नवाचार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/3032035_Educational%20Scenario%20%282%29.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-4 शिक्षा अधिगम नवाचार</h3>
+        <p>05-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2597687%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-4 शिक्षा अधिगम नवाचार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/3032035_Educational%20Scenario%20%282%29.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-5 शिक्षा अधिगम नवाचार</h3>
+        <p>06-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2599360%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-5 शिक्षा अधिगम नवाचार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+  </section>
+
+  <section>
+    <h2>राजस्थान का इतिहास</h2>
+    <div class="container">
+      <!-- Video 1 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2463846_History%20Of%20Rajasthan.png" alt="Thumbnail for Curriculum Discussion Part-1 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 || पाठ्यक्रम परिचर्चा</h3>
+          <p>22-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2533884%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: पाठ्यक्रम परिचर्चा Part-1">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6945002_History%20Of%20Rajasthan.png" alt="Thumbnail for Introduction to Rajasthan Part-1 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 || राजस्थान का परिचय</h3>
+          <p>23-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2535444%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान का परिचय Part-1">वीडियो चलाएँ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>1857 की क्रांति</h2>
+    <div class="container">
+      <!-- Video 1 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6945002_History%20Of%20Rajasthan.png" alt="Thumbnail for 1857 Revolution Part-1 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 || 1857 की क्रांति</h3>
+          <p>24-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2537044%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: 1857 की क्रांति Part-1">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/937124_History%20Of%20Rajasthan.png" alt="Thumbnail for 1857 Revolution Part-2 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-2 || 1857 की क्रांति</h3>
+          <p>25-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2538668%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: 1857 की क्रांति Part-2">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 3 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7196289_Rajasthan%20History.png" alt="Thumbnail for 1857 Revolution Part-3 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-3 || 1857 की क्रांति</h3>
+          <p>26-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2540306%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: 1857 की क्रांति Part-3">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 4 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/106050_History%20new.png" alt="Thumbnail for 1857 Revolution Part-4 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-4 || 1857 की क्रांति</h3>
+          <p>28-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2542211%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: 1857 की क्रांति Part-4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 5 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2491392_History%20Of%20Rajasthan.png" alt="Thumbnail for 1857 Revolution Part-5 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-5 || 1857 की क्रांति</h3>
+          <p>29-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2543831%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: 1857 की क्रांति Part-5">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 6 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1792184_History.png" alt="Thumbnail for 1857 Revolution Part-6 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-6 || 1857 की क्रांति</h3>
+          <p>30-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2545374%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: 1857 की क्रांति Part-6">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 7 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7846456_History%20new.png" alt="Thumbnail for 1857 Revolution Part-7 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-7 || 1857 की क्रांति</h3>
+          <p>01-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2546975%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: 1857 की क्रांति Part-7">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 8 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7208507_History%20Of%20Rajasthan.png" alt="Thumbnail for 1857 Revolution Part-8 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-8 || 1857 की क्रांति</h3>
+          <p>02-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2548562%2Fplain%2F240x426.mp4" aria-label="वीडियो चलाएँ: 1857 की क्रांति Part-8">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 9 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5098374_History%20Of%20Rajasthan.png" alt="Thumbnail for 1857 Revolution Part-9 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-9 || 1857 की क्रांति</h3>
+          <p>03-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2550093%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: 1857 की क्रांति Part-9">वीडियो चलाएँ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>राजस्थान में किसान आंदोलन</h2>
+    <div class="container">
+      <!-- Video 1 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/296081_History%20Of%20Rajasthan.png" alt="Thumbnail for Peasant Movements in Rajasthan Part-1 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 || राजस्थान में किसान आंदोलन</h3>
+          <p>06-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2553615%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान में किसान आंदोलन Part-1">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2401035_History%20Of%20Rajasthan.png" alt="Thumbnail for Peasant Movements in Rajasthan Part-2 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-2 || राजस्थान में किसान आंदोलन</h3>
+          <p>07-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2555410%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान में किसान आंदोलन Part-2">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 3 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1273865_History%20Of%20Rajasthan.png" alt="Thumbnail for Peasant Movements in Rajasthan Part-3 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-3 || राजस्थान में किसान आंदोलन</h3>
+          <p>08-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2557019%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान में किसान आंदोलन Part-3">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 4 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/481603_History%20Of%20Rajasthan.png" alt="Thumbnail for Peasant Movements in Rajasthan Part-4 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-4 || राजस्थान में किसान आंदोलन</h3>
+          <p>09-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2558534%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान में किसान आंदोलन Part-4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 5 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1598178_History%20Of%20Rajasthan.png" alt="Thumbnail for Peasant Movements in Rajasthan Part-5 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-5 || राजस्थान में किसान आंदोलन</h3>
+          <p>10-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2560080%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान में किसान आंदोलन Part-5">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 6 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/3303795_History%20Of%20Rajasthan.png" alt="Thumbnail for Peasant Movements in Rajasthan Part-6 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-6 || राजस्थान में किसान आंदोलन</h3>
+          <p>14-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2564889%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान में किसान आंदोलन Part-6">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 7 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4975421_History%20Of%20Rajasthan.png" alt="Thumbnail for Peasant Movements in Rajasthan Part-7 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-7 || राजस्थान में किसान आंदोलन</h3>
+          <p>14-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2564890%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान में किसान आंदोलन Part-7">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 8 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4566812_History%20Of%20Rajasthan.png" alt="Thumbnail for Peasant Movements in Rajasthan Part-8 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-8 || राजस्थान में किसान आंदोलन</h3>
+          <p>15-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2566456%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान में किसान आंदोलन Part-8">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 9 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5154061_History%20Of%20Rajasthan.png" alt="Thumbnail for Peasant Movements in Rajasthan Part-9 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-9 || राजस्थान में किसान आंदोलन</h3>
+          <p>15-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2566457%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान में किसान आंदोलन Part-9">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 10 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7416378_History%20Of%20Rajasthan.png" alt="Thumbnail for Peasant Movements in Rajasthan Part-10 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-10 || राजस्थान में किसान आंदोलन</h3>
+          <p>16-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2568262%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान में किसान आंदोलन Part-10">वीडियो चलाएँ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>कला और संस्कृति</h2>
+    <div class="container">
+      <!-- Video 1 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7850435_Art%20%26%20Culture%28%E0%A4%95%E0%A4%B2%E0%A4%BE%20%E0%A4%94%E0%A4%B0%20%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A5%83%E0%A4%A4%E0%A4%BF%29.png" alt="Thumbnail for Curriculum Discussion Part-1 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 || पाठ्यक्रम परिचर्चा</h3>
+          <p>24-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2537061%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: पाठ्यक्रम परिचर्चा Part-1">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4819118_Art%20%26%20Culture.png" alt="Thumbnail for Rajasthan Folk Deities Part-1 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 || राजस्थान के लोक देवता</h3>
+          <p>25-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2538640%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक देवता Part-1">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 3 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2856784_Rajesh%20Paliwal%20Sir%20Art%20%26%20Cul..jpg" alt="Thumbnail for Rajasthan Folk Deities Part-2 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-2 || राजस्थान के लोक देवता</h3>
+          <p>26-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2540304%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक देवता Part-2">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 4 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6881725_Rajesh%20Sir%20Rajasthan%20art%20and%20culture.jpeg" alt="Thumbnail for Rajasthan Folk Deities Part-3 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-3 || राजस्थान के लोक देवता</h3>
+          <p>28-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2542235%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक देवता Part-3">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 5 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/593394_Rajesh%20Paliwal%20Sir%20Art%20%26%20Cul..jpg" alt="Thumbnail for Rajasthan Folk Deities Part-4 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-4 || राजस्थान के लोक देवता</h3>
+          <p>29-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2543833%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक देवता Part-4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 6 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2868508_Rajesh%20Paliwal%20Sir%20Art%20%26%20Cul..jpg" alt="Thumbnail for Rajasthan Folk Deities Part-5 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-5 || राजस्थान के लोक देवता</h3>
+          <p>30-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2545376%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक देवता Part-5">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 7 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4514656_Rajesh%20Sir%20Rajasthan%20art%20and%20culture.jpeg" alt="Thumbnail for Rajasthan Folk Deities Part-6 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-6 || राजस्थान के लोक देवता</h3>
+          <p>01-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2546991%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक देवता Part-6">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 8 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6278813_Rajesh%20Paliwal%20Sir%20Art%20%26%20Cul..jpg" alt="Thumbnail for Rajasthan Folk Deities Part-7 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-7 || राजस्थान के लोक देवता</h3>
+          <p>02-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2548564%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक देवता Part-7">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 9 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4429564_Rajesh%20Paliwal%20Sir%20Art%20%26%20Cul..jpg" alt="Thumbnail for Rajasthan Folk Deities Part-8 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-8 || राजस्थान के लोक देवता</h3>
+          <p>03-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2550091%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक देवता Part-8">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 10 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4778110_Rajesh%20Paliwal%20Sir%20Art%20%26%20Cul..jpg" alt="Thumbnail for Rajasthan Folk Deities Part-9 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-9 || राजस्थान के लोक देवता</h3>
+          <p>06-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2553617%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक देवता Part-9">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 11 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1999057_Art%20%26%20Cul.%20by%20paliwal%20sir.jpg" alt="Thumbnail for Rajasthan Folk Songs Part-1 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 || राजस्थान के लोक गीत</h3>
+          <p>07-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2555413%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक गीत Part-1">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 12 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5270383_Art%20%26%20Culture%28%E0%A4%95%E0%A4%B2%E0%A4%BE%20%E0%A4%94%E0%A4%B0%20%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A5%83%E0%A4%A4%E0%A4%BF%29.png" alt="Thumbnail for Rajasthan Folk Songs Part-2 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-2 || राजस्थान के लोक गीत</h3>
+          <p>08-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2557020%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक गीत Part-2">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 13 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/889435_Art%20%26%20Culture.png" alt="Thumbnail for Rajasthan Folk Songs Part-3 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-3 || राजस्थान के लोक गीत</h3>
+          <p>09-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2558536%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक गीत Part-3">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video 14 -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7477832_Art%20%26%20Culture%28%E0%A4%95%E0%A4%B2%E0%A4%BE%20%E0%A4%94%E0%A4%B0%20%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A5%83%E0%A4%A4%E0%A4%BF%29.png" alt="Thumbnail for Rajasthan Folk Songs Part-4 Video" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-4 || राजस्थान के लोक गीत</h3>
+          <p>10-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2560082%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: राजस्थान के लोक गीत Part-4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4566812_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 राजस्थान में जनजाति आंदोलन</h3>
+          <p>15-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2566456%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 राजस्थान में जनजाति आंदोलन">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5154061_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-2 राजस्थान में जनजाति आंदोलन</h3>
+          <p>15-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2566457%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 राजस्थान में जनजाति आंदोलन">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7416378_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-3 राजस्थान में जनजाति आंदोलन</h3>
+          <p>16-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2568262%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-3 राजस्थान में जनजाति आंदोलन">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1777962_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-4 राजस्थान में जनजाति आन्दोलन</h3>
+        <p>05-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2597689%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-4 राजस्थान में जनजाति आन्दोलन">वीडियो चलाएँ</a>
+    </div>
+</div>
+      
+      <div class="video-card-wrapper">
+  <!-- 🔥 Notes Button above card -->
+  <a href="notes.html" class="floating-notes-button">📘 Notes</a>
+     
+        <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4953543_Art%20%26%20Culture.png" alt="Art & Culture Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 राजस्थान के प्रमुख संत एवं संप्रदाय</h3>
+          <p>12-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2561826%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 राजस्थान के प्रमुख संत एवं संप्रदाय">वीडियो चलाएँ</a>
+        </div>
+      </div>
+     </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2511930_Art%20%26%20Culture%28%E0%A4%95%E0%A4%B2%E0%A4%BE%20%E0%A4%94%E0%A4%B0%20%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A5%83%E0%A4%A4%E0%A4%BF%29.png" alt="Art & Culture Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-2 राजस्थान के प्रमुख संत एवं संप्रदाय</h3>
+          <p>14-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2564891%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 राजस्थान के प्रमुख संत एवं संप्रदाय">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2146904_Art%20%26%20Culture%28%E0%A4%95%E0%A4%B2%E0%A4%BE%20%E0%A4%94%E0%A4%B0%20%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A5%83%E0%A4%A4%E0%A4%BF%29.png" alt="Art & Culture Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-3 राजस्थान के प्रमुख संत एवं संप्रदाय</h3>
+          <p>15-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2566458%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-3 राजस्थान के प्रमुख संत एवं संप्रदाय">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4607205_Art%20%26%20Culture%28%E0%A4%95%E0%A4%B2%E0%A4%BE%20%E0%A4%94%E0%A4%B0%20%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A5%83%E0%A4%A4%E0%A4%BF%29.png" alt="Art & Culture Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-4 राजस्थान के प्रमुख संत एवं संप्रदाय</h3>
+          <p>16-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2568264%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-4 राजस्थान के प्रमुख संत एवं संप्रदाय">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6053675_Rajasthan%20Art%20And%20Culture.png" alt="Art & Culture Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-5 राजस्थान के प्रमुख संत एवं संप्रदाय</h3>
+          <p>17-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2569968%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-5 राजस्थान के प्रमुख संत एवं संप्रदाय">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/3612567_Art%20%26%20Culture%28%E0%A4%95%E0%A4%B2%E0%A4%BE%20%E0%A4%94%E0%A4%B0%20%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A5%83%E0%A4%A4%E0%A4%BF%29.png" alt="Art & Culture Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-6 राजस्थान के प्रमुख संत एवं संप्रदाय</h3>
+          <p>19-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2571867%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-6 राजस्थान के प्रमुख संत एवं संप्रदाय">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4307905_Rajesh%20Paliwal%20Sir%20Art%20%26%20Cul..jpg" alt="Art & Culture Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-7 राजस्थान के प्रमुख संत एवं संप्रदाय</h3>
+          <p>20-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2573458%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-7 राजस्थान के प्रमुख संत एवं संप्रदाय">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5083319_Rajasthan%20Art%20And%20Culture.png" alt="Art & Culture Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-8 राजस्थान के प्रमुख संत एवं संप्रदाय</h3>
+          <p>21-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2575170%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-8 राजस्थान के प्रमुख संत एवं संप्रदाय">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4426815_Rajasthan%20Art%20And%20Culture.png" alt="Art & Culture Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-9 राजस्थान के प्रमुख संत एवं संप्रदाय</h3>
+          <p>22-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2576955%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-9 राजस्थान के प्रमुख संत एवं संप्रदाय">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2313254_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part - 1 पाठ्यक्रम परिचर्चा</h3>
+          <p>16-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2525526%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part - 1 पाठ्यक्रम परिचर्चा">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6990980_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 राजस्थान का सामान्य परिचय</h3>
+          <p>17-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2527165%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 राजस्थान का सामान्य परिचय">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5550139_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-2 राजस्थान का सामान्य परिचय</h3>
+          <p>18-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2528723%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 राजस्थान का सामान्य परिचय">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5550139_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 राजस्थान की स्थिति एवं विस्तार</h3>
+          <p>19-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2531109%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 राजस्थान की स्थिति एवं विस्तार">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1641618_Geography%E0%A4%AD%E0%A5%82%E0%A4%97%E0%A5%8B%E0%A4%B2.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-2 राजस्थान की स्थिति एवं विस्तार</h3>
+          <p>21-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2532254%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 राजस्थान की स्थिति एवं विस्तार">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1997247_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-3 राजस्थान की स्थिति एवं विस्तार</h3>
+          <p>22-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2533883%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-3 राजस्थान की स्थिति एवं विस्तार">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/260064_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-4 राजस्थान की स्थिति एवं विस्तार</h3>
+          <p>23-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2535443%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-4 राजस्थान की स्थिति एवं विस्तार">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/3075038_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-5 राजस्थान की स्थिति एवं विस्तार</h3>
+          <p>25-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2538655%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-5 राजस्थान की स्थिति एवं विस्तार">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4376946_Rajasthan%20Geography.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-6 राजस्थान की स्थिति एवं विस्तार</h3>
+          <p>26-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2540305%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-6 राजस्थान की स्थिति एवं विस्तार">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5560495_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 जिला गठन एवं पुनर्गठन व संभाग</h3>
+          <p>28-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2542225%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 जिला गठन एवं पुनर्गठन व संभाग">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6227381_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-2 जिला गठन एवं पुनर्गठन व संभाग</h3>
+          <p>29-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2543832%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 जिला गठन एवं पुनर्गठन व संभाग">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2004352_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-1 राजस्थान के भौतिक प्रदेश</h3>
+          <p>30-April</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2545375%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7758603_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-2 राजस्थान के भौतिक प्रदेश</h3>
+          <p>01-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2546982%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6458994_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-3 राजस्थान के भौतिक प्रदेश</h3>
+          <p>02-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2548563%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-3 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2555066_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-4 राजस्थान के भौतिक प्रदेश</h3>
+          <p>03-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2550092%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-4 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6758158_Geography%20Of%20Rajasthan.jpeg" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-5 राजस्थान के भौतिक प्रदेश</h3>
+          <p>05-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2551891%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-5 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5887736_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-6 राजस्थान के भौतिक प्रदेश</h3>
+          <p>06-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2553616%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-6 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1638650_Geography%20Of%20Rajasthan.jpeg" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-7 राजस्थान के भौतिक प्रदेश</h3>
+          <p>07-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2555412%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-7 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7163635_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-8 राजस्थान के भौतिक प्रदेश</h3>
+          <p>08-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2557021%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-8 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7866291_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-9 राजस्थान के भौतिक प्रदेश</h3>
+          <p>09-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2558535%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-9 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/752280_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-10 राजस्थान के भौतिक प्रदेश</h3>
+          <p>10-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2560081%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-10 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6647009_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-11 राजस्थान के भौतिक प्रदेश</h3>
+          <p>12-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2561805%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-11 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4562990_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-12 राजस्थान के भौतिक प्रदेश</h3>
+          <p>16-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2568263%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-12 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1122442_Rajasthan%20Geography.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-13 राजस्थान के भौतिक प्रदेश</h3>
+          <p>17-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2569969%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-13 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4134735_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+        <div class="video-card-content">
+          <h3>Part-14 राजस्थान के भौतिक प्रदेश</h3>
+          <p>19-May</p>
+          <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2571868%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-14 राजस्थान के भौतिक प्रदेश">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7241643_Raghuveer%20Sir.jpg" alt="Geography Of Rajasthan Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-1 राजस्थान का अपवाह तंत्र – झीले, नदियाँ, बाँध</h3>
+          <p>20-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2573457/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5872538_Rajasthan%20Geography.png" alt="Geography Of Rajasthan Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-2 राजस्थान का अपवाह तंत्र – झीले, नदियाँ, बाँध</h3>
+          <p>21-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2575167/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1372108_Rajasthan%20Geography.png" alt="Geography Of Rajasthan Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-3 राजस्थान का अपवाह तंत्र – झीले, नदियाँ, बाँध</h3>
+          <p>22-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2576954/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1399234_Rajasthan%20Geography.png" alt="Geography Of Rajasthan Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-4 राजस्थान का अपवाह तंत्र – झीले, नदियाँ, बाँध</h3>
+          <p>23-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2578845/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/911885_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-5 राजस्थान का अपवाह तंत्र – झीले, नदियाँ, बाँध</h3>
+          <p>24-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2580623/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5213635_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-6 राजस्थान का अपवाह तंत्र – झीले, नदियाँ, बाँध</h3>
+          <p>26-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2582716/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5204822_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-7 राजस्थान का अपवाह तंत्र – झीले, नदियाँ, बाँध</h3>
+          <p>27-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2584434/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5084190_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-8 राजस्थान का अपवाह तंत्र – झीले, नदियाँ, बाँध</h3>
+          <p>28-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2586089/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1735009_Geography%20Of%20Rajasthan.jpeg" alt="Geography Of Rajasthan Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-1 राजस्थान मानसून तंत्र एवं जलवायु</h3>
+          <p>29-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2587772/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/3542351_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-2 राजस्थान मानसून तंत्र एवं जलवायु</h3>
+          <p>30-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2589365/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2883015_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-3 राजस्थान मानसून तंत्र एवं जलवायु</h3>
+          <p>31-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2591085/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/3622070_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-4 राजस्थान मानसून तंत्र एवं जलवायु</h3>
+          <p>02-June</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2592479/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+      <div class="video-card">
+
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/3622070_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+
+    <div class="video-card-content">
+
+        <h3>Part-5 राजस्थान मानसून तंत्र एवं जलवायु</h3>
+
+        <p>03-June</p>
+
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2594470%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-5 राजस्थान मानसून तंत्र एवं जलवायु">वीडियो चलाएँ</a>
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- Video -->
+
+<div class="video-card">
+
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/3622070_Geography%20Of%20Rajasthan.png" alt="Geography Of Rajasthan Thumbnail" loading="lazy">
+
+    <div class="video-card-content">
+
+        <h3>Part-6 राजस्थान मानसून तंत्र एवं जलवायु</h3>
+
+        <p>04-June</p>
+
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2596099%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-6 राजस्थान मानसून तंत्र एवं जलवायु">वीडियो चलाएँ</a>
+
+    </div>
+
+</div>
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1944681_Rajasthan%20Art%20And%20Culture.png" alt="Art & Culture Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-1 राजस्थानी भाषा, बोलियाँ एवं साहित्य</h3>
+          <p>23-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2578846/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5726005_Art%20%26%20Culture%28%E0%A4%95%E0%A4%B2%E0%A4%BE%20%E0%A4%94%E0%A4%B0%20%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A5%83%E0%A4%A4%E0%A4%BF%29.png" alt="Art & Culture Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-2 राजस्थानी भाषा, बोलियाँ एवं साहित्य</h3>
+          <p>24-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2580624/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6983645_Rajasthan%20Art%20And%20Culture.png" alt="Art & Culture Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-3 राजस्थानी भाषा, बोलियाँ एवं साहित्य</h3>
+          <p>26-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2582721/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/171898_Rajasthan%20Art%20And%20Culture.png" alt="Art & Culture Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-4 राजस्थानी भाषा, बोलियाँ एवं साहित्य</h3>
+          <p>27-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2584435/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6538596_Rajasthan%20Art%20And%20Culture.png" alt="Art & Culture Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-5 राजस्थानी भाषा, बोलियाँ एवं साहित्य</h3>
+          <p>28-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2586090/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2757645_Rajasthan%20Art%20And%20Culture.png" alt="Art & Culture Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-6 राजस्थानी भाषा, बोलियाँ एवं साहित्य</h3>
+          <p>29-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2587773/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2231301_Rajasthan%20Art%20And%20Culture.png" alt="Art & Culture Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-7 राजस्थानी भाषा, बोलियाँ एवं साहित्य</h3>
+          <p>30-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2589366/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5501322_Rajasthan%20Art%20And%20Culture.png" alt="Art & Culture Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-8 राजस्थानी भाषा, बोलियाँ एवं साहित्य</h3>
+          <p>31-May</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2591086/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2360956_Art%20%26%20Culture%28%E0%A4%95%E0%A4%B2%E0%A4%BE%20%E0%A4%94%E0%A4%B0%20%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A5%83%E0%A4%A4%E0%A4%BF%29.png" alt="Art & Culture Thumbnail">
+        <div class="video-card-content">
+          <h3>Part-9 राजस्थानी भाषा, बोलियाँ एवं साहित्य</h3>
+          <p>02-June</p>
+          <a href="pro_mp4_player.html?video=https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos/enc_plain_mp4/2592480/plain/720x1280.mp4">वीडियो चलाएँ</a>
+        </div>
+      </div>
+      <!-- Video -->
+
+<div class="video-card">
+
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2360956_Art%20%26%20Culture%28%E0%A4%95%E0%A4%B2%E0%A4%BE%20%E0%A4%94%E0%A4%B0%20%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A5%83%E0%A4%A4%E0%A4%BF%29.png" alt="Art & Culture Thumbnail" loading="lazy">
+
+    <div class="video-card-content">
+
+        <h3>Part-10 राजस्थानी भाषा, बोलियाँ एवं साहित्य</h3>
+
+        <p>03-June</p>
+
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2594475%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-10 राजस्थानी भाषा, बोलियाँ एवं साहित्य">वीडियो चलाएँ</a>
+
+    </div>
+
+</div>
+      
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2360956_Art%20%26%20Culture%28%E0%A4%95%E0%A4%B2%E0%A4%BE%20%E0%A4%94%E0%A4%B0%20%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A5%83%E0%A4%A4%E0%A4%BF%29.png" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-1 राजस्थान के प्रमुख मेले और त्यौहार</h3>
+        <p>04-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2596094%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 राजस्थान के प्रमुख मेले और त्यौहार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2360956_Art%20%26%20Culture%28%E0%A4%95%E0%A4%B2%E0%A4%BE%20%E0%A4%94%E0%A4%B0%20%E0%A4%B8%E0%A4%82%E0%A4%B8%E0%A5%8D%E0%A4%95%E0%A5%83%E0%A4%A4%E0%A4%BF%29.png" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-2 राजस्थान के प्रमुख मेले और त्यौहार</h3>
+        <p>05-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2597688%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 राजस्थान के प्रमुख मेले और त्यौहार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7810318_Art%20%26%20Culture.png" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-3 राजस्थान के प्रमुख मेले और त्यौहार</h3>
+        <p>06-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2599362%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-3 राजस्थान के प्रमुख मेले और त्यौहार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7810318_Art%20%26%20Culture.png" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-4 राजस्थान के प्रमुख मेले और त्यौहार</h3>
+        <p>09-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2601200%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-4 राजस्थान के प्रमुख मेले और त्यौहार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1482545_Rajesh%20Paliwal%20Sir%20Art%20%26%20Cul..jpg" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-5 राजस्थान के प्रमुख मेले और त्यौहार</h3>
+        <p>10-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2602900%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-5 राजस्थान के प्रमुख मेले और त्यौहार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1482545_Rajesh%20Paliwal%20Sir%20Art%20%26%20Cul..jpg" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-6 राजस्थान के प्रमुख मेले और त्यौहार</h3>
+        <p>11-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2604694%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-6 राजस्थान के प्रमुख मेले और त्यौहार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4581891_art%20and%20culture.png" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-7 राजस्थान के प्रमुख मेले और त्यौहार</h3>
+        <p>12-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2606331%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-7 राजस्थान के प्रमुख मेले और त्यौहार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7603790_Art%20%26%20Culture.png" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-8 राजस्थान के प्रमुख मेले और त्यौहार</h3>
+        <p>13-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2607949%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-8 राजस्थान के प्रमुख मेले और त्यौहार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1857279_Art%20%26%20Culture.png" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-9 राजस्थान के प्रमुख मेले और त्यौहार</h3>
+        <p>14-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2609690%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-9 राजस्थान के प्रमुख मेले और त्यौहार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5594336_Art%20%26%20Cul.%20by%20paliwal%20sir.jpg" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-10 राजस्थान के प्रमुख मेले और त्यौहार</h3>
+        <p>16-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2611166%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-10 राजस्थान के प्रमुख मेले और त्यौहार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5594336_Art%20%26%20Cul.%20by%20paliwal%20sir.jpg" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-11 राजस्थान के प्रमुख मेले और त्यौहार</h3>
+        <p>17-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2613133%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-11 राजस्थान के प्रमुख मेले और त्यौहार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4131531_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-1 राजस्थान में प्रजामण्डल आन्दोलन</h3>
+        <p>06-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2599363%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 राजस्थान में प्रजामण्डल आन्दोलन">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4131531_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-2 राजस्थान में प्रजामण्डल आन्दोलन</h3>
+        <p>09-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2601195%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 राजस्थान में प्रजामण्डल आन्दोलन">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/338399_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-3 राजस्थान में प्रजामण्डल आन्दोलन</h3>
+        <p>10-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2602899%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-3 राजस्थान में प्रजामण्डल आन्दोलन">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/338399_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-4 राजस्थान में प्रजामण्डल आन्दोलन</h3>
+        <p>11-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2604688%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-4 राजस्थान में प्रजामण्डल आन्दोलन">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1087052_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-5 राजस्थान में प्रजामण्डल आन्दोलन</h3>
+        <p>12-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2606330%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-5 राजस्थान में प्रजामण्डल आन्दोलन">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4908975_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-6 राजस्थान में प्रजामण्डल आन्दोलन</h3>
+        <p>13-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2607943%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-6 राजस्थान में प्रजामण्डल आन्दोलन">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7266900_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-7 राजस्थान में प्रजामण्डल आन्दोलन</h3>
+        <p>14-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2609689%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-7 राजस्थान में प्रजामण्डल आन्दोलन">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1517965_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-1 विद्यालय प्रबंधन एवं संबंधित समितियाँ</h3>
+        <p>10-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2602901%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 विद्यालय प्रबंधन एवं संबंधित समितियाँ">वीडियो चलाएँ</a>    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1517965_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-2 विद्यालय प्रबंधन एवं संबंधित समितियाँ</h3>
+        <p>11-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2604695%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 विद्यालय प्रबंधन एवं संबंधित समितियाँ">वीडियो चलाएँ</a>    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/4224707_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-1 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार</h3>
+        <p>12-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2606332%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2611840_Educational%20Scenario%20%282%29.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-2 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार</h3>
+        <p>13-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2607944%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/555044_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-3 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार</h3>
+        <p>14-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2609691%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-3 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5254149_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-4 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार</h3>
+        <p>17-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2613134%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-4 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6330309_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-5 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार</h3>
+        <p>18-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2615007%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-5 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/3148540_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-6 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार</h3>
+        <p>19-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2616652%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-6 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5254149_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-7 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार</h3>
+        <p>20-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2618581%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-7 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5254149_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-8 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार</h3>
+        <p>21-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2620277%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-8 केन्द्र एवं राजस्थान की विद्यार्थी कल्याणकारी योजनाएँ एव पुरस्कार">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/3961367_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-1 राजस्थान का एकीकरण</h3>
+        <p>18-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2615001%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 राजस्थान का एकीकरण">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1161754_Rajasthan%20History.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-2 राजस्थान का एकीकरण</h3>
+        <p>19-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2616647%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 राजस्थान का एकीकरण">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/3961367_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-3 राजस्थान का एकीकरण</h3>
+        <p>20-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2618563%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-3 राजस्थान का एकीकरण">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1161754_Rajasthan%20History.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-4 राजस्थान का एकीकरण</h3>
+        <p>21-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2620276%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-4 राजस्थान का एकीकरण">वीडियो चलाएँ</a>
+    </div>
+</div>
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6619108_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-1 राजस्थान के प्रमुख व्यक्तित्व</h3>
+        <p>23-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2622147%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 राजस्थान के प्रमुख व्यक्तित्व">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/2219906_History%20Of%20Rajasthan.png" alt="History Of Rajasthan Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-2 राजस्थान के प्रमुख व्यक्तित्व</h3>
+        <p>24-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2623843%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 राजस्थान के प्रमुख व्यक्तित्व">वीडियो चलाएँ</a>
+    </div>
+</div>
+      
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5594336_Art%20%26%20Cul.%20by%20paliwal%20sir.jpg" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-1 राजस्थान के प्रमुख लोक नृत्य</h3>
+        <p>18-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2615006%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 राजस्थान के प्रमुख लोक नृत्य">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/7783222_Rajesh%20Sir%20Rajasthan%20art%20and%20culture.jpeg" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-2 राजस्थान के प्रमुख लोक नृत्य</h3>
+        <p>19-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2616648%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 राजस्थान के प्रमुख लोक नृत्य">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6351767_Rajesh%20Sir%20Rajasthan%20art%20and%20culture.jpeg" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-3 राजस्थान के प्रमुख लोक नृत्य</h3>
+        <p>20-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2618574%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-3 राजस्थान के प्रमुख लोक नृत्य">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6351767_Rajesh%20Sir%20Rajasthan%20art%20and%20culture.jpeg" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-4 राजस्थान के प्रमुख लोक नृत्य</h3>
+        <p>21-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2620278%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-4 राजस्थान के प्रमुख लोक नृत्य">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6351767_Rajesh%20Sir%20Rajasthan%20art%20and%20culture.jpeg" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-5 राजस्थान के प्रमुख लोक नृत्य</h3>
+        <p>23-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2622148%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-5 राजस्थान के प्रमुख लोक नृत्य">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5087118_Rajesh%20Sir%20Rajasthan%20art%20and%20culture.jpeg" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-1 राजस्थान के प्रमुख रीति रिवाज</h3>
+        <p>24-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2623851%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 राजस्थान के प्रमुख रीति रिवाज">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/5087118_Rajesh%20Sir%20Rajasthan%20art%20and%20culture.jpeg" alt="Art & Culture Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-2 राजस्थान के प्रमुख रीति रिवाज</h3>
+        <p>25-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2625537%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 राजस्थान के प्रमुख रीति रिवाज">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/430510_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-1 नि:शुल्क एवं अनिवार्य बाल शिक्षा का अधिकार अधिनियम, 2009</h3>
+        <p>23-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2622150%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-1 नि:शुल्क एवं अनिवार्य बाल शिक्षा का अधिकार अधिनियम, 2009">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/816185_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-2 नि:शुल्क एवं अनिवार्य बाल शिक्षा का अधिकार अधिनियम, 2009</h3>
+        <p>24-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2623860%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-2 नि:शुल्क एवं अनिवार्य बाल शिक्षा का अधिकार अधिनियम, 2009">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6704041_bijesh%20sir.jfif" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-3 नि:शुल्क एवं अनिवार्य बाल शिक्षा का अधिकार अधिनियम, 2009</h3>
+        <p>25-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2625565%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-3 नि:शुल्क एवं अनिवार्य बाल शिक्षा का अधिकार अधिनियम, 2009">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/6891462_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-4 नि:शुल्क एवं अनिवार्य बाल शिक्षा का अधिकार अधिनियम, 2009</h3>
+        <p>26-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2627244%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-4 नि:शुल्क एवं अनिवार्य बाल शिक्षा का अधिकार अधिनियम, 2009">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+<!-- Video -->
+<div class="video-card">
+    <img src="https://apps-s3-prod.utkarshapp.com/admin_v1/file_manager/thumbnail/1988973_Educational%20Scenario.png" alt="Educational Scenario Thumbnail" loading="lazy">
+    <div class="video-card-content">
+        <h3>Part-5 नि:शुल्क एवं अनिवार्य बाल शिक्षा का अधिकार अधिनियम, 2009</h3>
+        <p>26-June</p>
+        <a href="pro_mp4_player.html?video=https%3A%2F%2Fapps-s3-jw-prod.utkarshapp.com%2Fadmin_v1%2Ffile_library%2Fvideos%2Fenc_plain_mp4%2F2627245%2Fplain%2F720x1280.mp4" aria-label="वीडियो चलाएँ: Part-5 नि:शुल्क एवं अनिवार्य बाल शिक्षा का अधिकार अधिनियम, 2009">वीडियो चलाएँ</a>
+    </div>
+</div>
+
+
+
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 शैक्षिक वीडियो कोर्स. सभी अधिकार सुरक्षित.<br>कृपया अच्छे से पढ़ाई करें। समय बर्बाद मत करें, यही वक्त है मेहनत का — जो आज पसीना बहाओगे, वही कल सफलता बनकर लौटेगा।</p>
+  </footer>
+
+  <script type="text/javascript">
+    var gk_isXlsx = false;
+    var gk_xlsxFileLookup = {};
+    var gk_fileData = {};
+
+    function filledCell(cell) {
+      return cell !== '' && cell != null;
+    }
+
+    function loadFileData(filename) {
+      if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+        try {
+          var workbook = XLSX.read(gk_fileData[filename], {
+            type: 'base64'
+          });
+          var firstSheetName = workbook.SheetNames[0];
+          var worksheet = workbook.Sheets[firstSheetName];
+          // Convert sheet to JSON to filter blank rows
+          var jsonData = XLSX.utils.sheet_to_json(worksheet, {
+            header: 1,
+            blankrows: false,
+            defval: ''
+          });
+          // Filter out blank rows (rows where all cells are empty, null, or undefined)
+          var filteredData = jsonData.filter(row => row.some(filledCell));
+          // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+          var headerRowIndex = filteredData.findIndex((row, index) =>
+            row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+          );
+          // Fallback
+          if (headerRowIndex === -1 || headerRowIndex > 25) {
+            headerRowIndex = 0;
+          }
+          // Convert filtered JSON back to CSV
+          var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex));
+          csv = XLSX.utils.sheet_to_csv(csv, {
+            header: 1
+          });
+          return csv;
+        } catch (e) {
+          console.error(e);
+          return "";
+        }
+      }
+      return gk_fileData[filename] || "";
+    }
+
+    function toggleColorPalette() {
+      const palette = document.getElementById('color-palette');
+      palette.classList.toggle('active');
+    }
+
+    function changeTheme(theme) {
+      const root = document.documentElement;
+      const themes = {
+        'neon-green': {
+          primary: '#00ff00',
+          light: '#ccff90',
+          secondary: '#99cc00',
+          glow: 'rgba(0, 255, 0, 0.5)',
+          glowBright: 'rgba(0, 255, 0, 0.8)',
+          buttonText: '#000'
+        },
+        'sky-blue': {
+          primary: '#4fc3f7',
+          light: '#b3e5fc',
+          secondary: '#81d4fa',
+          glow: 'rgba(79, 195, 247, 0.5)',
+          glowBright: 'rgba(79, 195, 247, 0.8)',
+          buttonText: '#fff'
+        },
+        'red': {
+          primary: '#ff0000',
+          light: '#ff6666',
+          secondary: '#cc0000',
+          glow: 'rgba(255, 0, 0, 0.5)',
+          glowBright: 'rgba(255, 0, 0, 0.8)',
+          buttonText: '#000'
+        },
+        'purple': {
+          primary: '#8a2be2',
+          light: '#d8b9ff',
+          secondary: '#b19cd9',
+          glow: 'rgba(138, 43, 226, 0.5)',
+          glowBright: 'rgba(138, 43, 226, 0.8)',
+          buttonText: '#fff'
+        },
+        'orange': {
+          primary: '#ff6200',
+          light: '#ffab91',
+          secondary: '#dd4b00',
+          glow: 'rgba(255, 98, 0, 0.5)',
+          glowBright: 'rgba(255, 98, 0, 0.8)',
+          buttonText: '#000'
+        },
+        'cyan': {
+          primary: '#00e5ff',
+          light: '#80deea',
+          secondary: '#00b7eb',
+          glow: 'rgba(0, 229, 255, 0.5)',
+          glowBright: 'rgba(0, 229, 255, 0.8)',
+          buttonText: '#000'
+        },
+        'pink': {
+          primary: '#ff4081',
+          light: '#ff80ab',
+          secondary: '#d81b60',
+          glow: 'rgba(255, 64, 129, 0.5)',
+          glowBright: 'rgba(255, 64, 129, 0.8)',
+          buttonText: '#fff'
+        },
+        'lime': {
+          primary: '#c6ff00',
+          light: '#e1ff5e',
+          secondary: '#aeea00',
+          glow: 'rgba(198, 255, 0, 0.5)',
+          glowBright: 'rgba(198, 255, 0, 0.8)',
+          buttonText: '#000'
+        },
+        'teal': {
+          primary: '#00bfa5',
+          light: '#80cbc4',
+          secondary: '#00897b',
+          glow: 'rgba(0, 191, 165, 0.5)',
+          glowBright: 'rgba(0, 191, 165, 0.8)',
+          buttonText: '#fff'
+        },
+        'amber': {
+          primary: '#ffab00',
+          light: '#ffd180',
+          secondary: '#ff6f00',
+          glow: 'rgba(255, 171, 0, 0.5)',
+          glowBright: 'rgba(255, 171, 0, 0.8)',
+          buttonText: '#000'
+        }
+      };
+      const selectedTheme = themes[theme] || themes['neon-green'];
+      root.style.setProperty('--primary-color', selectedTheme.primary);
+      root.style.setProperty('--light-color', selectedTheme.light);
+      root.style.setProperty('--secondary-color', selectedTheme.secondary);
+      root.style.setProperty('--glow-color', selectedTheme.glow);
+      root.style.setProperty('--glow-color-bright', selectedTheme.glowBright);
+      root.style.setProperty('--button-text-color', selectedTheme.buttonText);
+      document.getElementById('color-palette').classList.remove('active');
+    }
+    document.querySelectorAll('.color-option').forEach(option => {
+      option.addEventListener('click', () => {
+        const theme = option.getAttribute('data-theme');
+        changeTheme(theme);
+      });
+    });
+  </script>
+</body>
+
+</html>
+<!-- partial -->
+  
+</body>
+</html>

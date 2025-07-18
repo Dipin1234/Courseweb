@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3rd Grade Teacher Level 2nd SST Batch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #ffc107;
+            color: black;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            font-size: 1.2em;
+            font-weight: bold;
+            overflow: hidden; /* Ensures text stays within bounds */
+        }
+        .header-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: move 10s linear infinite; /* Animation for continuous movement */
+        }
+        @keyframes move {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background-color: #fff;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            margin: 0 10px;
+            padding: 5px 15px;
+            cursor: pointer;
+            background-color: #000;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .tab.active {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #000;
+        }
+        .content-list {
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .item-number {
+            width: 30px;
+            height: 30px;
+            background-color: #ffc107;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .item-title {
+            font-size: 1em;
+            color: #333;
+            font-weight: bold;
+        }
+        @media (max-width: 400px) {
+            .content-list {
+                padding: 10px;
+            }
+            .item {
+                padding: 8px;
+            }
+            .item-number {
+                width: 25px;
+                height: 25px;
+                font-size: 0.9em;
+            }
+            .item-title {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-text">3rd Grade Teacher Level 2nd SST Batch</div>
+    </div>
+    <div class="tabs">
+        <div class="tab active">Content</div>
+        <div class="tab">Description</div>
+        <div class="tab">FAQ</div>
+        <div class="tab">Fbt</div>
+    </div>
+    <div class="content-list">
+        <div class="item" onclick="navigateTo('content1_1.html')"><div class="item-number">1</div><div class="item-title">Course Information and Syllabus</div></div>
+        <div class="item" onclick="navigateTo('content1_2.html')"><div class="item-number">2</div><div class="item-title">Live Class Schedule</div></div>
+        <div class="item" onclick="navigateTo('content1_3.html')"><div class="item-number">3</div><div class="item-title">Offline Classroom Test</div></div>
+        <div class="item" onclick="navigateTo('content1_4.html')"><div class="item-number">4</div><div class="item-title">Current Affairs (समसामयिकी)</div></div>
+        <div class="item"onclick="navigateTo('content1_5.html')"><div class="item-number">5</div><div class="item-title">प्राचीन भारत का इतिहास - भगवान प्रसाद सर</div></div>
+        <div class="item" onclick="navigateTo('content1_6.html')"><div class="item-number">6</div><div class="item-title">Information Technology By Pradeep Kumar Sir</div></div>
+        <div class="item" onclick="navigateTo('content1_7.html')"><div class="item-number">7</div><div class="item-title">विश्व का भूगोल - विनोद सर</div></div>
+        <div class="item" onclick="navigateTo('content1_8.html')"><div class="item-number">8</div><div class="item-title">राजनीतिक सिद्घांत - कुलदीप चौधरी सर</div></div>
+        <div class="item" onclick="navigateTo('content1_9.html')"><div class="item-number">9</div><div class="item-title">शैक्षिक परिदृश्य - बिजेश सर</div></div>
+        <div class="item" onclick="navigateTo('content1_10.html')"><div class="item-number">10</div><div class="item-title">राजस्थान कला और संस्कृति राजेश सर</div></div>
+        <div class="item" onclick="navigateTo('content1_11.html')"><div class="item-number">11</div><div class="item-title">Rajasthan History By Bharat Dadhich Sir</div></div>
+        <div class="item" onclick="navigateTo('content1_12.html')"><div class="item-number">12</div><div class="item-title">राजस्थान का भूगोल- रघुवीर सर</div></div>
+    </div>
+
+    <script>
+    
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                // Add logic to switch content based on tab if needed
+            });
+        });
+        
+         function navigateTo(url) {
+     window.location.href = url;
+ }
+    </script>
+</body>
+</html>

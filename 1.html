@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Website</title>
+    <style>
+        .dk-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            box-shadow: var(--shadow-light);
+        }
+        
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #f0f0f0;
+            --primary-color: #007bff;
+            --navbar-bg: #ffffff;
+            --shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.2);
+            --border-color: #e0e0e0;
+            --button-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-bg: #2c2c2c;
+            --navbar-bg: #1a1a1a;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.2);
+            --shadow-dark: 0 4px 8px rgba(255, 255, 255, 0.05), 0 2px 4px rgba(255, 255, 255, 0.02);
+            --border-color: #444444;
+            --button-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(0, 0, 0, 0.2);
+            --primary-color: #66b0ff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background-color: var(--navbar-bg);
+            box-shadow: var(--shadow-light);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-radius: 8px;
+            margin: 0 1rem;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+            background-color: rgba(0, 0, 0, 0.05);
+            box-shadow: var(--button-shadow);
+        }
+        
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 0.5rem;
+            border-radius: 6px;
+            box-shadow: var(--button-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .menu-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: none;
+        }
+        
+        .dropdown.active {
+            display: block;
+        }
+        
+        .dropdown-content {
+            background-color: var(--navbar-bg);
+            min-width: 160px;
+            box-shadow: var(--shadow-light);
+            border-radius: 8px;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 1000;
+        }
+        
+        .dropdown-content a {
+            display: block;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: var(--card-bg);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 0.5rem;
+            border-radius: 6px;
+            box-shadow: var(--button-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .search-box {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--navbar-bg);
+            box-shadow: var(--shadow-light);
+            z-index: 1000;
+        }
+        
+        .search-box.active {
+            display: block;
+        }
+        
+        .search-box input {
+            width: 100%;
+            border: none;
+            background: none;
+            color: var(--text-color);
+            outline: none;
+            padding: 0.3rem;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 0.5rem;
+            border-radius: 6px;
+            box-shadow: var(--button-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Photo Gallery */
+        .photo-gallery {
+            max-width: 1200px;
+            margin: 1rem auto;
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow-light);
+            border-radius: 8px;
+        }
+        
+        .gallery-slides {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-slide {
+            min-width: 100%;
+            height: 200px;
+            background-color: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .main-search {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .main-search input {
+            width: 100%;
+            max-width: 600px;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1.1rem;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+        }
+        
+        .main-search input:focus {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            background: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-color);
+            box-shadow: var(--button-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .filter-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Course Cards */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .course-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease;
+            display: none;
+        }
+        
+        .course-card.show {
+            display: block;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .course-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .course-card p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .explore-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            box-shadow: var(--button-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .explore-btn:hover {
+            background-color: #0056b3;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                padding: 1rem 0;
+                background-color: var(--navbar-bg);
+                position: absolute;
+                top: 100%;
+                left: 0;
+                box-shadow: var(--shadow-light);
+                border-radius: 8px;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .dropdown {
+                display: block;
+            }
+            
+            .dropdown-content {
+                position: static;
+                width: 100%;
+                background-color: var(--card-bg);
+                border-radius: 0;
+            }
+            
+            .search-box {
+                width: 100%;
+                right: 0;
+            }
+            
+            .photo-gallery {
+                margin-top: 0.5rem;
+            }
+            
+            .gallery-slide {
+                height: 150px;
+            }
+            
+            .navbar {
+                margin: 0;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo" style="display: flex; align-items: center;">
+                <img src="me.jpg" alt="DK Logo" class="dk-logo">
+                <span>CourseHub</span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <div class="dropdown" id="menuDropdown">
+                    <div class="dropdown-content">
+                        <a onclick="filterCourses('all')">All</a>
+                        <a onclick="filterCourses('Government Exams')">Government Exams</a>
+                        <a onclick="filterCourses('School')">School</a>
+                        <a onclick="filterCourses('IIT-JEE')">IIT-JEE</a>
+                        <a onclick="filterCourses('NEET')">NEET</a>
+                        <a onclick="filterCourses('Tech')">Tech</a>
+                    </div>
+                </div>
+            </div>
+            <div class="search-container">
+                <button class="search-btn" onclick="toggleSearch()">🔍</button>
+                <div class="search-box" id="searchBox">
+                    <input type="text" placeholder="Search courses..." oninput="searchCourses(this.value)">
+                </div>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        </div>
+    </nav>
+    
+    <div class="photo-gallery">
+        <div class="gallery-slides" id="gallerySlides">
+            <div class="gallery-slide">
+                <img src="image1.jpg" alt="Slide 1" style="width: 100%; height: auto;">
+            </div>
+            <div class="gallery-slide">
+                <img src="image2.jpg" alt="Slide 2" style="width: 100%; height: auto;">
+            </div>
+            <div class="gallery-slide">
+                <img src="image3.jpg" alt="Slide 3" style="width: 100%; height: auto;">
+            </div>
+        </div>
+    </div>
+    <main class="main-content">
+        <div class="main-search">
+            <input type="text" placeholder="Find your perfect course..." oninput="searchCourses(this.value)">
+        </div>
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterCourses('all')">All</button>
+            <button class="filter-btn" onclick="filterCourses('Government Exams')">Government Exams</button>
+            <button class="filter-btn" onclick="filterCourses('School')">School</button>
+            <button class="filter-btn" onclick="filterCourses('IIT-JEE')">IIT-JEE</button>
+            <button class="filter-btn" onclick="filterCourses('NEET')">NEET</button>
+            <button class="filter-btn" onclick="filterCourses('Tech')">Tech</button>
+        </div>
+        <div class="course-grid">
+            <div class="course-card" data-category="Government Exams">
+                <h3>📚 3rd Grade Teacher</h3>
+                <p>3rd Grade Teacher Level 2nd SS Batch (From Jodhpur Classroom)</p>
+                <a href="index2.html" class="explore-btn">Explore</a>
+            </div>
+            
+            <div class="course-card" data-category="Government Exams">
+                <h3>📚 UPSC Preparation</h3>
+                <p>Comprehensive course for UPSC aspirants covering all subjects.</p>
+                <a href="#" class="explore-btn">Explore</a>
+            </div>
+            <div class="course-card" data-category="Government Exams">
+                <h3>📘 CET Foundation Course</h3>
+                <p>Complete foundation batch for CET exam: Math, Reasoning, English & GK.</p>
+                <a href="cet.html" class="explore-btn">Explore</a>
+            </div>
+            
+            
+            
+            <div class="course-card" data-category="School">
+                <h3>📚 Class 12 CBSE</h3>
+                <p>Complete syllabus coverage for CBSE Class 12 board exams.</p>
+                <a href="#" class="explore-btn">Explore</a>
+            </div>
+            <div class="course-card" data-category="School">
+                <h3>📚 Class 10 Maths</h3>
+                <p>Master mathematics for Class 10 board exams.</p>
+                <a href="#" class="explore-btn">Explore</a>
+            </div>
+            <div class="course-card" data-category="Government Exams">
+                <h3>📚 Aditya Ranjan Math</h3>
+                <p>Master arithmetic & advanced math for SSC, Railways & more.</p>
+                <a href="Aditya.html" class="explore-btn">Explore</a>
+            </div>
+            <div class="course-card" data-category="IIT-JEE">
+                <h3>📚 IIT-JEE Advanced</h3>
+                <p>Advanced problem-solving for IIT-JEE entrance exam.</p>
+                <a href="#" class="explore-btn">Explore</a>
+            </div>
+            <div class="course-card" data-category="IIT-JEE" onclick="window.open('https://t.me/Prayas_JEE_2_0_2026_Batchpw/8', '_blank')" style="cursor: pointer;">
+                <h3>📚 JEE Main Physics Wallah</h3>
+                <p>In-depth physics preparation for JEE Main.</p>
+                <a href="https://t.me/Prayas_JEE_2_0_2026_Batchpw/8" class="explore-btn">Explore</a>
+            </div>
+            
+            <div class="course-card" data-category="NEET">
+                <h3>📚 NEET Biology</h3>
+                <p>In-depth biology preparation for NEET medical entrance.</p>
+                <a href="#" class="explore-btn">Explore</a>
+            </div>
+           <div class="course-card" data-category="Government Exams">
+           <h3>📘 Utkarsh Patwar Math</h3>
+<p>Topic-wise coverage of Patwar Maths by Utkarsh classes.</p>
+       <a href="mathpatwar.html" class="explore-btn">Explore</a>
+   </div>
+            <div class="course-card" data-category="NEET">
+                <h3>📚 NEET Chemistry</h3>
+                <p>Comprehensive chemistry course for NEET aspirants.</p>
+                <a href="#" class="explore-btn">Explore</a>
+            </div>
+            <div class="course-card" data-category="Tech">
+                <h3>📊 DSA by Abdul Bari</h3>
+                <p>Master data structures and algorithms to build a strong problem-solving foundation.</p>
+                <a href="https://t.me/c/2294366576/4" class="explore-btn" target="_blank">Explore</a>
+            </div>
+            
+            <div class="course-card" data-category="Tech">
+                <h3>🌐 Web Development (Full Stack)</h3>
+                <p>Learn frontend, backend, MongoDB, and hosting to build robust web projects.</p>
+                <a href="https://t.me/c/2425933344/5" class="explore-btn" target="_blank">Explore</a>
+            </div>
+            
+            <div class="course-card" data-category="Tech">
+                <h3>🗄️ SQL & DBMS (Khan Academy)</h3>
+                <p>Learn to query and manage databases efficiently with SQL and DBMS concepts.</p>
+                <a href="https://www.khanacademy.org/computing/computer-programming/sql" class="explore-btn" target="_blank">Explore</a>
+            </div>
+            
+            <div class="course-card" data-category="Tech">
+                <h3>📱 Flutter by Angela Yu</h3>
+                <p>Build cross-platform mobile apps using Dart and Flutter.</p>
+                <a href="https://t.me/FlutterTutorialByAngelaYu" class="explore-btn" target="_blank">Explore</a>
+            </div>
+            
+            <div class="course-card" data-category="Tech">
+                <h3>🤖 Machine Learning</h3>
+                <p>Dive into AI/ML with Python, NumPy, Pandas, and real-world projects.</p>
+                <a href="https://t.me/c/2507651482/5" class="explore-btn" target="_blank">Explore</a>
+            </div>
+            
+            <div class="course-card" data-category="Tech">
+                <h3>⚙️ DevOps</h3>
+                <p>Master CI/CD pipelines, Docker, Kubernetes, Jenkins, and more.</p>
+                <a href="https://t.me/free_devops" class="explore-btn" target="_blank">Explore</a>
+            </div>
+            
+            <div class="course-card" data-category="Tech">
+                <h3>🚀 Sigma 6.0 (Advanced Roadmap)</h3>
+                <p>Complete guide to next-level skills, mindset, and industry readiness.</p>
+                <a href="https://t.me/c/2426009321/3" class="explore-btn" target="_blank">Explore</a>
+            </div>
+            
+            <div class="course-card" data-category="Tech">
+                <h3>🎨 Web Design & UI/UX</h3>
+                <p>Master visual and UX design using Figma and creative tools.</p>
+                <a href="https://t.me/c/2704791153/2" class="explore-btn" target="_blank">Explore</a>
+            </div>
+            
+            <div class="course-card" data-category="Tech">
+                <h3>👥 Web Dev Forum (Community)</h3>
+                <p>Connect with developers, ask doubts, and share your projects.</p>
+                <a href="https://t.me/Web_Development_Forum" class="explore-btn" target="_blank">Explore</a>
+            </div>
+            <div class="course-card" data-category="Tech">
+                <h3>📚 Web Development</h3>
+                <p>Learn HTML, CSS, and JavaScript from scratch.</p>
+                <a href="#" class="explore-btn">Explore</a>
+            </div>
+            <div class="course-card" data-category="Tech">
+                <h3>📚 Python Programming</h3>
+                <p>Master Python for data science and automation.</p>
+                <a href="#" class="explore-btn">Explore</a>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        function toggleTheme() {
+            document.body.setAttribute('data-theme',
+                document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        }
+        
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+            document.getElementById('menuDropdown').classList.toggle('active');
+            document.getElementById('searchBox').classList.remove('active');
+        }
+        
+        function toggleSearch() {
+            document.getElementById('searchBox').classList.toggle('active');
+            document.getElementById('navLinks').classList.remove('active');
+            document.getElementById('menuDropdown').classList.remove('active');
+        }
+        
+        function searchCourses(query) {
+            const cards = document.querySelectorAll('.course-card');
+            query = query.toLowerCase().trim();
+            const activeFilter = document.querySelector('.filter-btn.active')?.textContent || 'all';
+            
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const category = card.getAttribute('data-category');
+                if (title.includes(query) && (activeFilter === 'all' || activeFilter === category)) {
+                    card.classList.add('show');
+                } else {
+                    card.classList.remove('show');
+                }
+            });
+        }
+        
+        function filterCourses(category) {
+            const cards = document.querySelectorAll('.course-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            const query = document.querySelector('.main-search input').value.toLowerCase().trim();
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            const activeButton = Array.from(buttons).find(btn => btn.textContent === category);
+            if (activeButton) activeButton.classList.add('active');
+            
+            cards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                if ((category === 'all' || cardCategory === category) && title.includes(query)) {
+                    card.classList.add('show');
+                } else {
+                    card.classList.remove('show');
+                }
+            });
+            
+            const dropdownLinks = document.querySelectorAll('.dropdown-content a');
+            dropdownLinks.forEach(link => {
+                link.style.fontWeight = link.textContent === category ? 'bold' : 'normal';
+            });
+            
+            // Close mobile menu
+            document.getElementById('navLinks').classList.remove('active');
+            document.getElementById('menuDropdown').classList.remove('active');
+        }
+        
+        // Photo Gallery Slideshow
+        let slideIndex = 0;
+        const slides = document.getElementById('gallerySlides');
+        const totalSlides = document.querySelectorAll('.gallery-slide').length;
+        
+        function showSlides() {
+            slideIndex++;
+            if (slideIndex >= totalSlides) slideIndex = 0;
+            slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+        }
+        
+        setInterval(showSlides, 3000); // Change slide every 3 seconds
+        showSlides(); // Initial call to start the slideshow
+        
+        // Initialize
+        filterCourses('all');
+    </script>
+</body>
+
+</html>

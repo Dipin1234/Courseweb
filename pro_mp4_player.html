@@ -1,0 +1,818 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Video Player with Chromecast</title>
+  <script src="https://www.gstatic.com/cast/sdk/castsdk.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    :root {
+      /* Default: Neon Green Theme */
+      --primary-color: #00ff00;
+      --light-color: #ccff90;
+      --secondary-color: #99cc00;
+      --glow-color: rgba(0, 255, 0, 0.5);
+      --glow-color-bright: rgba(0, 255, 0, 0.8);
+      --button-text-color: #000;
+    }
+
+    body {
+      background-color: #1a1a1a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: var(--light-color);
+      position: relative;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    video {
+      width: 100%;
+      display: block;
+      transform-origin: center center;
+      object-fit: contain;
+    }
+
+    .error-message {
+      color: var(--primary-color);
+      font-size: 1.2rem;
+      text-align: center;
+      margin-top: 1rem;
+      text-shadow: 0 0 8px var(--glow-color);
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    [data-theme="transparent"] .controls {
+      background: transparent;
+    }
+
+    .video-container:hover .controls {
+      opacity: 1;
+    }
+
+    .controls button,
+    .controls select,
+    .controls input {
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+      background: var(--primary-color);
+      color: var(--button-text-color);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    [data-theme="transparent"] .controls button,
+    [data-theme="transparent"] .controls select,
+    [data-theme="transparent"] .controls input {
+      background: transparent;
+      border: 1px solid var(--light-color);
+    }
+
+    .controls button:hover,
+    .controls select:hover {
+      background: var(--secondary-color);
+      box-shadow: 0 0 8px var(--glow-color);
+    }
+
+    [data-theme="transparent"] .controls button:hover,
+    [data-theme="transparent"] .controls select:hover {
+      background: var(--secondary-color);
+    }
+
+    .controls input[type="range"] {
+      width: 100px;
+      accent-color: var(--primary-color);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 5px;
+      background: #444;
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+
+    [data-theme="transparent"] .progress-bar {
+      background: transparent;
+    }
+
+    .progress {
+      height: 100%;
+      background: var(--primary-color);
+      width: 0;
+    }
+
+    .time {
+      font-size: 12px;
+      color: var(--light-color);
+      margin: 0 10px;
+    }
+
+    #castStatus {
+      font-size: 12px;
+      color: var(--light-color);
+      margin: 0 10px;
+    }
+
+    .color-picker {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      border: 2px solid var(--light-color);
+      box-shadow: 0 0 10px var(--glow-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.3s;
+      z-index: 1000;
+    }
+
+    [data-theme="transparent"] .color-picker {
+      background: transparent;
+      border: 2px solid #ffffff;
+    }
+
+    .color-picker:hover {
+      box-shadow: 0 0 15px var(--glow-color-bright);
+    }
+
+    .color-picker::before {
+      content: '🎨';
+      font-size: 1.5rem;
+    }
+
+    .color-palette {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background-color: #0d0d0d;
+      border: 2px solid var(--primary-color);
+      border-radius: 8px;
+      padding: 1rem;
+      display: none;
+      grid-template-columns: repeat(5, 30px);
+      gap: 10px;
+      box-shadow: 0 0 15px var(--glow-color);
+      z-index: 999;
+    }
+
+    [data-theme="transparent"] .color-palette {
+      border: 2px solid #ffffff;
+    }
+
+    .color-palette.active {
+      display: grid;
+    }
+
+    .color-option {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #fff;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .color-option.transparent-option {
+      background: transparent;
+      border: 2px dashed #ffffff;
+    }
+
+    .color-option:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 10px #fff;
+    }
+
+    @media (max-width: 600px) {
+      .color-picker {
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+      }
+
+      .color-palette {
+        top: 50px;
+        right: 10px;
+        grid-template-columns: repeat(3, 30px);
+      }
+    }
+  </style>
+</head>
+<body data-theme="neon-green">
+  <div class="color-picker" onclick="toggleColorPalette()"></div>
+  <div class="color-palette" id="color-palette">
+    <div class="color-option" style="background-color: #00ff00;" data-theme="neon-green"></div>
+    <div class="color-option" style="background-color: #4fc3f7;" data-theme="sky-blue"></div>
+    <div class="color-option" style="background-color: #ff0000;" data-theme="red"></div>
+    <div class="color-option" style="background-color: #8a2be2;" data-theme="purple"></div>
+    <div class="color-option" style="background-color: #ff6200;" data-theme="orange"></div>
+    <div class="color-option" style="background-color: #00e5ff;" data-theme="cyan"></div>
+    <div class="color-option" style="background-color: #ff4081;" data-theme="pink"></div>
+    <div class="color-option" style="background-color: #c6ff00;" data-theme="lime"></div>
+    <div class="color-option" style="background-color: #00bfa5;" data-theme="teal"></div>
+    <div class="color-option" style="background-color: #ffab00;" data-theme="amber"></div>
+    <div class="color-option transparent-option" data-theme="transparent"></div>
+  </div>
+
+  <div class="video-container" id="videoContainer">
+    <video id="videoPlayer" controls>
+      <source id="video-source" src="" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="progress-bar">
+      <div class="progress"></div>
+    </div>
+    <p id="error-message" class="error-message" style="display: none;">Video load error: Please check the URL or try again later.</p>
+    <div class="controls">
+      <button onclick="togglePlay()">Play/Pause</button>
+      <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+      <select id="playbackSpeed" onchange="changeSpeed()">
+        <option value="0.5">0.5x</option>
+        <option value="1" selected>1x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+        <option value="3">3x</option>
+        <option value="4">4x</option>
+        <option value="5">5x</option>
+      </select>
+      <span class="time" id="currentTime">0:00</span> / <span class="time" id="duration">0:00</span>
+      <button onclick="enterPiP()">PiP</button>
+      <button onclick="toggleFullScreen()">Full Screen</button>
+      <button id="castButton" onclick="toggleCast()">Cast</button>
+      <span id="castStatus">Disconnected</span>
+      <input type="text" id="videoUrl" placeholder="Enter video URL" style="flex: 1;">
+      <button onclick="loadVideo()">Load URL</button>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoUrl = urlParams.get('video');
+    const video = document.getElementById('videoPlayer');
+    const videoSource = document.getElementById('video-source');
+    const errorMessage = document.getElementById('error-message');
+    const videoUrlInput = document.getElementById('videoUrl');
+    if (videoUrl) {
+        try {
+            const decodedUrl = decodeURIComponent(videoUrl);
+            videoSource.src = decodedUrl;
+            videoUrlInput.value = decodedUrl;
+            video.load();
+        } catch (e) {
+            if (errorMessage) errorMessage.style.display = 'block';
+        }
+    } else {
+        if (errorMessage) errorMessage.style.display = 'block';
+    }
+    video.addEventListener('error', () => {
+        if (errorMessage) errorMessage.style.display = 'block';
+    });
+
+    var gk_isXlsx = false;
+    var gk_xlsxFileLookup = {};
+    var gk_fileData = {};
+
+    function filledCell(cell) {
+      return cell !== '' && cell != null;
+    }
+
+    function loadFileData(filename) {
+      if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+        try {
+          var workbook = XLSX.read(gk_fileData[filename], {
+            type: 'base64'
+          });
+          var firstSheetName = workbook.SheetNames[0];
+          var worksheet = workbook.Sheets[firstSheetName];
+          var jsonData = XLSX.utils.sheet_to_json(worksheet, {
+            header: 1,
+            blankrows: false,
+            defval: ''
+          });
+          var filteredData = jsonData.filter(row => row.some(filledCell));
+          var headerRowIndex = filteredData.findIndex((row, index) =>
+            row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+          );
+          if (headerRowIndex === -1 || headerRowIndex > 25) {
+            headerRowIndex = 0;
+          }
+          var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex));
+          csv = XLSX.utils.sheet_to_csv(csv, {
+            header: 1
+          });
+          return csv;
+        } catch (e) {
+          console.error(e);
+          return "";
+        }
+      }
+      return gk_fileData[filename] || "";
+    }
+
+    function toggleColorPalette() {
+      const palette = document.getElementById('color-palette');
+      palette.classList.toggle('active');
+    }
+
+    function changeTheme(theme) {
+      const root = document.documentElement;
+      const body = document.body;
+      const themes = {
+        'neon-green': {
+          primary: '#00ff00',
+          light: '#ccff90',
+          secondary: '#99cc00',
+          glow: 'rgba(0, 255, 0, 0.5)',
+          glowBright: 'rgba(0, 255, 0, 0.8)',
+          buttonText: '#000'
+        },
+        'sky-blue': {
+          primary: '#4fc3f7',
+          light: '#b3e5fc',
+          secondary: '#81d4fa',
+          glow: 'rgba(79, 195, 247, 0.5)',
+          glowBright: 'rgba(79, 195, 247, 0.8)',
+          buttonText: '#fff'
+        },
+        'red': {
+          primary: '#ff0000',
+          light: '#ff6666',
+          secondary: '#cc0000',
+          glow: 'rgba(255, 0, 0, 0.5)',
+          glowBright: 'rgba(255, 0, 0, 0.8)',
+          buttonText: '#000'
+        },
+        'purple': {
+          primary: '#8a2be2',
+          light: '#d8b9ff',
+          secondary: '#b19cd9',
+          glow: 'rgba(138, 43, 226, 0.5)',
+          glowBright: 'rgba(138, 43, 226, 0.8)',
+          buttonText: '#fff'
+        },
+        'orange': {
+          primary: '#ff6200',
+          light: '#ffab91',
+          secondary: '#dd4b00',
+          glow: 'rgba(255, 98, 0, 0.5)',
+          glowBright: 'rgba(255, 98, 0, 0.8)',
+          buttonText: '#000'
+        },
+        'cyan': {
+          primary: '#00e5ff',
+          light: '#80deea',
+          secondary: '#00b7eb',
+          glow: 'rgba(0, 229, 255, 0.5)',
+          glowBright: 'rgba(0, 229, 255, 0.8)',
+          buttonText: '#000'
+        },
+        'pink': {
+          primary: '#ff4081',
+          light: '#ff80ab',
+          secondary: '#d81b60',
+          glow: 'rgba(255, 64, 129, 0.5)',
+          glowBright: 'rgba(255, 64, 129, 0.8)',
+          buttonText: '#fff'
+        },
+        'lime': {
+          primary: '#c6ff00',
+          light: '#e1ff5e',
+          secondary: '#aeea00',
+          glow: 'rgba(198, 255, 0, 0.5)',
+          glowBright: 'rgba(198, 255, 0, 0.8)',
+          buttonText: '#000'
+        },
+        'teal': {
+          primary: '#00bfa5',
+          light: '#80cbc4',
+          secondary: '#00897b',
+          glow: 'rgba(0, 191, 165, 0.5)',
+          glowBright: 'rgba(0, 191, 165, 0.8)',
+          buttonText: '#fff'
+        },
+        'amber': {
+          primary: '#ffab00',
+          light: '#ffd180',
+          secondary: '#ff6f00',
+          glow: 'rgba(255, 171, 0, 0.5)',
+          glowBright: 'rgba(255, 171, 0, 0.8)',
+          buttonText: '#000'
+        },
+        'transparent': {
+          primary: 'transparent',
+          light: '#ffffff',
+          secondary: 'rgba(255, 255, 255, 0.7)',
+          glow: 'rgba(255, 255, 255, 0.5)',
+          glowBright: 'rgba(255, 255, 255, 0.8)',
+          buttonText: '#000'
+        }
+      };
+
+      const selectedTheme = themes[theme] || themes['neon-green'];
+      root.style.setProperty('--primary-color', selectedTheme.primary);
+      root.style.setProperty('--light-color', selectedTheme.light);
+      root.style.setProperty('--secondary-color', selectedTheme.secondary);
+      root.style.setProperty('--glow-color', selectedTheme.glow);
+      root.style.setProperty('--glow-color-bright', selectedTheme.glowBright);
+      root.style.setProperty('--button-text-color', selectedTheme.buttonText);
+      body.setAttribute('data-theme', theme);
+      document.getElementById('color-palette').classList.remove('active');
+    }
+
+    document.querySelectorAll('.color-option').forEach(option => {
+      option.addEventListener('click', () => {
+        const theme = option.getAttribute('data-theme');
+        changeTheme(theme);
+      });
+    });
+  </script>
+
+  <script>
+    const videoContainer = document.getElementById('videoContainer');
+    const progressBar = document.querySelector('.progress-bar');
+    const progress = document.querySelector('.progress');
+    const currentTimeDisplay = document.getElementById('currentTime');
+    const durationDisplay = document.getElementById('duration');
+    const volumeControl = document.getElementById('volume');
+    const castStatus = document.getElementById('castStatus');
+    let zoomLevel = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let isDragging = false;
+    let startX, startY;
+    let initialDistance = 0;
+    let castSession = null;
+
+    window['__onGCastApiAvailable'] = function(isAvailable) {
+      if (isAvailable) {
+        initializeCastApi();
+      }
+    };
+
+    function initializeCastApi() {
+      const castContext = cast.framework.CastContext.getInstance();
+      castContext.setOptions({
+        receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+        autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+      });
+      castContext.addEventListener(
+        cast.framework.CastContextEventType.CAST_STATE_CHANGED,
+        (event) => {
+          castStatus.textContent = event.castState === cast.framework.CastState.CONNECTED ?
+            'Connected' : 'Disconnected';
+        }
+      );
+      castContext.addEventListener(
+        cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
+        (event) => {
+          if (event.sessionState === cast.framework.SessionState.SESSION_STARTED) {
+            castSession = castContext.getCurrentSession();
+            loadMediaOnCast();
+          } else if (event.sessionState === cast.framework.SessionState.SESSION_ENDED) {
+            castSession = null;
+            video.play();
+          }
+        }
+      );
+    }
+
+    function loadMediaOnCast() {
+      if (!castSession) return;
+      const mediaInfo = new chrome.cast.media.MediaInfo(videoSource.src, 'video/mp4');
+      mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
+      mediaInfo.metadata.title = 'Video Player';
+      const request = new chrome.cast.media.LoadRequest(mediaInfo);
+      request.currentTime = video.currentTime;
+      castSession.loadMedia(request).then(
+        () => {
+          video.pause();
+        },
+        (error) => {
+          console.error('Cast load error:', error);
+          castStatus.textContent = 'Cast Error';
+        }
+      );
+    }
+
+    function toggleCast() {
+      const castContext = cast.framework.CastContext.getInstance();
+      if (castContext.getCastState() === cast.framework.CastState.CONNECTED) {
+        castContext.endCurrentSession(true);
+      } else {
+        castContext.requestSession();
+      }
+    }
+
+    function togglePlay() {
+      if (castSession) {
+        const media = castSession.getMediaSession();
+        if (media) {
+          if (media.playerState === chrome.cast.media.PlayerState.PLAYING) {
+            media.pause(null);
+          } else {
+            media.play(null);
+          }
+        }
+      } else {
+        if (video.paused) {
+          video.play();
+        } else {
+          video.pause();
+        }
+      }
+    }
+
+    volumeControl.addEventListener('input', () => {
+      video.volume = volumeControl.value;
+      if (castSession) {
+        const media = castSession.getMediaSession();
+        if (media) {
+          castSession.setReceiverVolumeLevel(volumeControl.value);
+        }
+      }
+    });
+
+    function changeSpeed() {
+      const speed = parseFloat(document.getElementById('playbackSpeed').value);
+      video.playbackRate = speed;
+      if (castSession) {
+        const media = castSession.getMediaSession();
+        if (media) {
+          media.setPlaybackRate(speed, null);
+        }
+      }
+    }
+
+    video.addEventListener('timeupdate', () => {
+      if (!castSession) {
+        const percent = (video.currentTime / video.duration) * 100;
+        progress.style.width = `${percent}%`;
+        currentTimeDisplay.textContent = formatTime(video.currentTime);
+        durationDisplay.textContent = formatTime(video.duration);
+      }
+    });
+
+    progressBar.addEventListener('click', (e) => {
+      const rect = progressBar.getBoundingClientRect();
+      const pos = (e.clientX - rect.left) / rect.width;
+      video.currentTime = pos * video.duration;
+      if (castSession) {
+        const media = castSession.getMediaSession();
+        if (media) {
+          media.seek({
+            currentTime: pos * video.duration
+          });
+        }
+      }
+    });
+
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      seconds = Math.floor(seconds % 60);
+      return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    async function enterPiP() {
+      try {
+        if (document.pictureInPictureElement) {
+          await document.exitPictureInPicture();
+        } else if (!castSession) {
+          await video.requestPictureInPicture();
+        }
+      } catch (error) {
+        console.error('PiP error:', error);
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        videoContainer.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function updateTransform() {
+      zoomLevel = Math.max(1, Math.min(zoomLevel, 3));
+      const rect = video.getBoundingClientRect();
+      const maxTranslateX = (rect.width * (zoomLevel - 1)) / 2;
+      const maxTranslateY = (rect.height * (zoomLevel - 1)) / 2;
+      translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, translateX));
+      translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, translateY));
+      video.style.transform = `scale(${zoomLevel}) translate(${translateX}px, ${translateY}px)`;
+    }
+
+    videoContainer.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      zoomLevel += delta;
+      updateTransform();
+    }, { passive: false });
+
+    videoContainer.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        initialDistance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+      } else if (e.touches.length === 1 && zoomLevel > 1) {
+        isDragging = true;
+        startX = e.touches[0].clientX - translateX;
+        startY = e.touches[0].clientY - translateY;
+      }
+    });
+
+    videoContainer.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const currentDistance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const scaleChange = currentDistance / initialDistance;
+        zoomLevel *= scaleChange;
+        initialDistance = currentDistance;
+        updateTransform();
+      } else if (e.touches.length === 1 && isDragging && zoomLevel > 1) {
+        e.preventDefault();
+        translateX = e.touches[0].clientX - startX;
+        translateY = e.touches[0].clientY - startY;
+        updateTransform();
+      }
+    });
+
+    videoContainer.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+
+    videoContainer.addEventListener('mousedown', (e) => {
+      if (zoomLevel > 1) {
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+      }
+    });
+
+    videoContainer.addEventListener('mousemove', (e) => {
+      if (isDragging && zoomLevel > 1) {
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        updateTransform();
+      }
+    });
+
+    videoContainer.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    videoContainer.addEventListener('mouseleave', () => {
+      isDragging = false;
+    });
+
+    function loadVideo() {
+      const url = document.getElementById('videoUrl').value;
+      if (url) {
+        try {
+          videoSource.src = url;
+          video.load();
+          video.play();
+          zoomLevel = 1;
+          translateX = 0;
+          translateY = 0;
+          updateTransform();
+          if (errorMessage) errorMessage.style.display = 'none';
+          if (castSession) {
+            loadMediaOnCast();
+          }
+        } catch (error) {
+          if (errorMessage) errorMessage.style.display = 'block';
+          console.error('Load video error:', error);
+        }
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case ' ':
+          togglePlay();
+          break;
+        case 'ArrowRight':
+          video.currentTime += 5;
+          if (castSession) {
+            const media = castSession.getMediaSession();
+            if (media) {
+              media.seek({
+                currentTime: video.currentTime
+              });
+            }
+          }
+          break;
+        case 'ArrowLeft':
+          video.currentTime -= 5;
+          if (castSession) {
+            const media = castSession.getMediaSession();
+            if (media) {
+              media.seek({
+                currentTime: video.currentTime
+              });
+            }
+          }
+          break;
+        case 'ArrowUp':
+          video.volume = Math.min(video.volume + 0.1, 1);
+          volumeControl.value = video.volume;
+          if (castSession) {
+            castSession.setReceiverVolumeLevel(video.volume);
+          }
+          break;
+        case 'ArrowDown':
+          video.volume = Math.max(video.volume - 0.1, 0);
+          volumeControl.value = video.volume;
+          if (castSession) {
+            castSession.setReceiverVolumeLevel(video.volume);
+          }
+          break;
+      }
+    });
+
+    video.setAttribute('playsinline', '');
+  </script>
+</body>
+</html>

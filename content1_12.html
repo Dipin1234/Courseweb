@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>राजस्थान का भूगोल - रघुवीर सर</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #ffc107;
+            color: black;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            font-size: 1.2em;
+            font-weight: bold;
+            overflow: hidden;
+        }
+        .header-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: move 10s linear infinite;
+        }
+        @keyframes move {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .content-list {
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .item-number {
+            width: 30px;
+            height: 30px;
+            background-color: #ffc107;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .item-title {
+            font-size: 1em;
+            color: black;
+            font-weight: bold;
+        }
+        @media (max-width: 400px) {
+            .content-list {
+                padding: 10px;
+            }
+            .item {
+                padding: 8px;
+            }
+            .item-number {
+                width: 25px;
+                height: 25px;
+                font-size: 0.9em;
+            }
+            .item-title {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-text">राजस्थान का भूगोल - रघुवीर सर</div>
+    </div>
+    <div class="content-list">
+        <div class="item" onclick="navigateTo('content201.html')"><div class="item-number">1</div><div class="item-title">पाठ्यक्रम परिचर्चा</div></div>
+        <div class="item" onclick="navigateTo('content202.html')"><div class="item-number">2</div><div class="item-title">Classroom Material PDF</div></div>
+        <div class="item" onclick="navigateTo('content203.html')"><div class="item-number">3</div><div class="item-title">राजस्थान का सामान्य परिचय</div></div>
+        <div class="item" onclick="navigateTo('content204.html')"><div class="item-number">4</div><div class="item-title">राजस्थान की स्थिति एवं विस्तार</div></div>
+        <div class="item" onclick="navigateTo('content205.html')"><div class="item-number">5</div><div class="item-title">जिला गठन एवं पुनर्गठन का इतिहास</div></div>
+        <div class="item" onclick="navigateTo('content206.html')"><div class="item-number">6</div><div class="item-title">राजस्थान के भौतिक प्रदेश</div></div>
+        <div class="item" onclick="navigateTo('content207.html')"><div class="item-number">7</div><div class="item-title">राजस्थान का अपवाह तंत्र : नदियाँ, झीलें एवं बाँध</div></div>
+        <div class="item" onclick="navigateTo('content208.html')"><div class="item-number">8</div><div class="item-title">राजस्थान मानसून तंत्र एवं जलवायु</div></div>
+        <div class="item" onclick="navigateTo('content209.html')"><div class="item-number">9</div><div class="item-title">राजस्थान में वन संपदा</div></div>
+        <div class="item" onclick="navigateTo('content210.html')"><div class="item-number">10</div><div class="item-title">मृदा संसाधन</div></div>
+        <div class="item" onclick="navigateTo('content211.html')"><div class="item-number">11</div><div class="item-title">राजस्थान की कृषि व प्रमुख फसलें</div></div>
+    </div>
+
+    <script>
+    function navigateTo(url) {
+    window.location.href = url;
+}
+   
+        // No additional JavaScript needed for this static layout
+    </script>
+</body>
+</html>

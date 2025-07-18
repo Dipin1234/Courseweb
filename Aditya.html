@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths Classes & Notes - Aditya Ranjan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: red;
+            color: black;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .moving-heading {
+            display: inline-block;
+            white-space: nowrap;
+            animation: move 10s linear infinite;
+        }
+        @keyframes move {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .home-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .home-button:hover {
+            background-color: #1c86ee;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 400px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.02);
+        }
+        .card img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-right: 10px;
+            flex-shrink: 0;
+            border-radius: 5px;
+        }
+        .card-content {
+            padding: 10px;
+            flex: 1;
+        }
+        .card-content h3 {
+            margin: 0 0 10px;
+            font-size: 1em;
+            color: #333;
+            line-height: 1.2;
+        }
+        .moving-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: moveContent 10s linear infinite;
+        }
+        @keyframes moveContent {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        @media (max-width: 400px) {
+            .card {
+                width: 100%;
+            }
+            .card img {
+                width: 100px;
+                height: 100px;
+            }
+            .card-content h3 {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2 class="moving-heading">Aditya Ranjan Maths Classes & Notes</h2>
+        <button class="home-button" onclick="window.location.href='index.html'">Home</button>
+    </div>
+    <div class="container">
+        <!-- Card 1: Maths Class -->
+        <div class="card" onclick="navigateTo('https://t.me/Adityaranjanpaidbatch2024/17448')">
+            <img src="ranjan.jpg" alt="Maths Class">
+            <div class="card-content">
+                <h3>Maths Classes by Aditya <br> Ranjan (Paid Batch)</h3>
+                <div class="moving-content">Live + Recorded: Video Lectures, Class Schedule, Tests</div>
+            </div>
+        </div>
+        
+        <!-- Card 2: Notes -->
+        <div class="card" onclick="navigateTo('https://t.me/adityaranjansir_notes/132')">
+            <img src="ranjan.jpg" alt="Maths Notes">
+            <div class="card-content">
+                <h3>Aditya Ranjan Maths <br>Notes + DPP</h3>
+                <div class="moving-content">PDFs, Daily Practice Papers, Topic-wise Tests</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateTo(url) {
+            window.open(url, "_blank");
+        }
+    </script>
+</body>
+</html>
